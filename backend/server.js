@@ -17,21 +17,36 @@ app.get('/posts',async (req, res) => {
 });
 
 app.post("/posts", async (req, res) => {
-  const { titulo, url: img, descripcion } = req.body
-  await addPosts(titulo, img, descripcion)
-  res.send("Post agregado con éxito")
+  try {
+    const { titulo, url: img, descripcion } = req.body
+    await addPosts(titulo, img, descripcion);
+    res.send("Post agregado con éxito");
+  } catch (error) {
+    res.status(500).send('Error al agregar el post');
+  }
 })
 
 app.put('/posts/like/:id', async (req, res) => {
-  const { id } = req.params;
-  const updatePost = await editPosts(id);
-  res.json(updatePost);
+  try {
+    const { id } = req.params;
+    const { likes } = req.body;
+
+    const updatePost = await editPosts(id, likes);
+    res.json(updatePost);
+
+  } catch (error) {
+    res.status(500).send('Error al actualizar el post');
+  }
 })
 
 app.delete('/posts/:id', async (req, res) => {
-  const { id } = req.params;
-  await deletePosts(id);
-  res.send('Post eliminado con éxito');
+  try {
+    const { id } = req.params;
+    await deletePosts(id);
+    res.send('Post eliminado con éxito');
+  } catch (error) {
+    res.status(500).send('Error al eliminar el post');
+  };
 })
 
 app.listen(PORT, console.log(`Server is running on http://localhost:${PORT}`));

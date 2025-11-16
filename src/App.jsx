@@ -22,13 +22,16 @@ function App() {
     getPosts();
   };
 
-  // este método se utilizará en el siguiente desafío
-  const like = async (id) => {
-    await axios.put(urlBaseServer + `/posts/like/${id}`);
+  const like = async (id, likes) => {
+    const newLikes = likes + 1;
+
+    await axios.put(urlBaseServer + `/posts/like/${id}`, {
+      likes: newLikes,
+    });
+
     getPosts();
   };
 
-  // este método se utilizará en el siguiente desafío
   const eliminarPost = async (id) => {
     await axios.delete(urlBaseServer + `/posts/${id}`);
     getPosts();
